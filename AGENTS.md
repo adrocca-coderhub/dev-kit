@@ -9,11 +9,12 @@ Este repositorio es un **toolkit de desarrollador**: prompts reutilizables para 
 | Capa | Tecnología |
 |---|---|
 | Scripts de datos | Python 3.9+ |
+| Gestión de dependencias | pyproject.toml (setuptools) |
 | Transformaciones / ETL | pandas>=2.0.0 |
-| Tipado estático | mypy (modo strict recomendado) |
-| Linter | Ruff o Flake8 |
+| Tipado estático | mypy (modo strict) |
+| Linter | Ruff |
 | Formatter | Black (ancho 88) + isort |
-| Tests | pytest |
+| Tests | pytest + pytest-cov |
 | TypeScript (snippets/templates) | ES modules, ESLint, Prettier |
 | Documentación | Markdown + Mermaid (`flowchart TD`) |
 | IDE | VSCode |
@@ -74,7 +75,8 @@ dev-kit/
 │   └── tasks/             # tasks.json
 ├── AGENTS.md
 ├── README.md
-└── requirements.txt
+├── pyproject.toml
+└── requirements.txt       # migrado — ver pyproject.toml
 ```
 
 ---
@@ -114,8 +116,11 @@ tests/
 Este repo no tiene servidor ni aplicación. Los scripts se ejecutan individualmente:
 
 ```bash
-# Instalar dependencias
-pip install -r requirements.txt
+# Instalar dependencias (solo runtime)
+pip install -e .
+
+# Instalar dependencias de desarrollo (lint, tests, tipos)
+pip install -e ".[dev]"
 
 # ETL completo
 python scripts/etl/pipeline_etl.py --input examples/input/data.csv --output examples/output/data_etl.csv

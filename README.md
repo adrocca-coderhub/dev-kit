@@ -36,8 +36,11 @@ Centralizar templates, prompts, skills, snippets, scripts base y playbooks reuti
 | Validación de schema | `python scripts/data_quality/validate_schema.py --input <ruta>` |
 
 ```bash
-# Instalar dependencias
-pip install -r requirements.txt
+# Instalar dependencias (solo runtime)
+pip install -e .
+
+# Instalar dependencias de desarrollo (lint, tests, tipos)
+pip install -e ".[dev]"
 ```
 
 ---
