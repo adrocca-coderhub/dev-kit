@@ -79,3 +79,14 @@ Este documento sirve como mapa maestro del `dev-kit`, explicando qué contiene c
 ## Recomendación general
 No usar todo a la vez.
 Elegir solo los artefactos necesarios según el tipo de tarea.
+
+---
+
+## Documentación adicional
+
+| Documento | Propósito |
+|---|---|
+| `docs/guia-de-uso.md` | Guía paso a paso de todas las herramientas del kit: prompts, skills, templates, playbooks y agentes |
+| `docs/agent-strategy.md` | Descripción detallada de cada agente OpenCode: inputs, outputs, permisos y diferencias |
+| `docs/workflows/opencode-workflow.md` | Workflows de OpenCode por tipo de tarea |
+| `docs/workflows/solution-planning-workflow.md` | Cómo usar `solution-planner` para tickets, features y proyectos |

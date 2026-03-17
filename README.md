@@ -135,10 +135,12 @@ Para usar: copiar `settings.json` a `.vscode/settings.json` y `tasks.json` a `.v
 
 ## Documentación interna
 
+- `docs/guia-de-uso.md` — **guía paso a paso de todas las herramientas**: prompts, skills, templates, playbooks, agentes y slash commands
 - `docs/kit-index.md` — mapa maestro del kit: cuándo usar cada carpeta
+- `docs/agent-strategy.md` — descripción detallada de cada agente OpenCode
 - `docs/decisions/` — ADRs: decisiones de arquitectura registradas
 - `docs/standards/` — estándares de documentación y naming conventions
-- `docs/workflows/` — flujos de trabajo por tipo de tarea (feature, bugfix, datos, arquitectura)
+- `docs/workflows/` — flujos de trabajo por tipo de tarea
 
 ---
 
