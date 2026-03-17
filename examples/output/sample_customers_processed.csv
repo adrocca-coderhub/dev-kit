@@ -1,0 +1,5 @@
+customer_id,status,email,amount,country,amount_category
+001,active,ana@example.com,1200,PE,high
+002,inactive,carlos@example.com,450,PE,standard
+003,active,maria@example.com,980,CL,standard
+004,active,luis@example.com,1500,PE,high

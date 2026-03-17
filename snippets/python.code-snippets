@@ -1,0 +1,73 @@
+{
+  "Python Main Script": {
+    "prefix": "pymain",
+    "body": [
+      "from __future__ import annotations",
+      "",
+      "import sys",
+      "",
+      "",
+      "def main() -> int:",
+      "    ${1:print(\"Hello world\")}",
+      "    return 0",
+      "",
+      "",
+      "if __name__ == \"__main__\":",
+      "    sys.exit(main())"
+    ],
+    "description": "Base script Python con main"
+  },
+  "Python Logger Setup": {
+    "prefix": "pylogger",
+    "body": [
+      "import logging",
+      "import sys",
+      "",
+      "",
+      "def get_logger(name: str = \"app\") -> logging.Logger:",
+      "    logger = logging.getLogger(name)",
+      "",
+      "    if logger.handlers:",
+      "        return logger",
+      "",
+      "    logger.setLevel(logging.INFO)",
+      "",
+      "    handler = logging.StreamHandler(sys.stdout)",
+      "    formatter = logging.Formatter(",
+      "        \"%(asctime)s | %(levelname)s | %(name)s | %(message)s\"",
+      "    )",
+      "    handler.setFormatter(formatter)",
+      "    logger.addHandler(handler)",
+      "",
+      "    return logger"
+    ],
+    "description": "Configuración base de logger en Python"
+  },
+  "Python Argparse Script": {
+    "prefix": "pyargs",
+    "body": [
+      "import argparse",
+      "",
+      "",
+      "def parse_args() -> argparse.Namespace:",
+      "    parser = argparse.ArgumentParser(description=\"${1:Script description}\")",
+      "    parser.add_argument(\"--input\", required=True, help=\"${2:Input path}\")",
+      "    parser.add_argument(\"--output\", required=True, help=\"${3:Output path}\")",
+      "    return parser.parse_args()"
+    ],
+    "description": "Base argparse para scripts Python"
+  },
+  "Python Pandas ETL Function": {
+    "prefix": "pyetl",
+    "body": [
+      "import pandas as pd",
+      "",
+      "",
+      "def transform_data(df: pd.DataFrame) -> pd.DataFrame:",
+      "    df = df.copy()",
+      "    ${1:# TODO: implement transformation logic}",
+      "    return df"
+    ],
+    "description": "Función base de transformación ETL con pandas"
+  }
+}

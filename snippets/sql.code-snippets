@@ -1,0 +1,68 @@
+{
+  "SQL Select Base": {
+    "prefix": "sqlselect",
+    "body": [
+      "SELECT",
+      "    ${1:column_1},",
+      "    ${2:column_2}",
+      "FROM ${3:schema.table_name}",
+      "WHERE 1 = 1",
+      "  AND ${4:condition};"
+    ],
+    "description": "Base SELECT SQL"
+  },
+  "SQL CTE Base": {
+    "prefix": "sqlcte",
+    "body": [
+      "WITH source_data AS (",
+      "    SELECT",
+      "        ${1:id},",
+      "        ${2:created_at},",
+      "        ${3:status}",
+      "    FROM ${4:schema.table_name}",
+      "    WHERE 1 = 1",
+      "),",
+      "filtered_data AS (",
+      "    SELECT",
+      "        ${1:id},",
+      "        ${2:created_at},",
+      "        ${3:status}",
+      "    FROM source_data",
+      "    WHERE ${5:status IS NOT NULL}",
+      ")",
+      "SELECT",
+      "    ${1:id},",
+      "    ${2:created_at},",
+      "    ${3:status}",
+      "FROM filtered_data;"
+    ],
+    "description": "Base query con CTE"
+  },
+  "SQL Create Table Base": {
+    "prefix": "sqlcreate",
+    "body": [
+      "CREATE TABLE ${1:schema.table_name} (",
+      "    id VARCHAR(50) PRIMARY KEY,",
+      "    created_at TIMESTAMP,",
+      "    status VARCHAR(50)",
+      ");"
+    ],
+    "description": "Base CREATE TABLE"
+  },
+  "SQL Insert Base": {
+    "prefix": "sqlinsert",
+    "body": [
+      "INSERT INTO ${1:schema.table_name} (",
+      "    ${2:id},",
+      "    ${3:created_at},",
+      "    ${4:status}",
+      ")",
+      "VALUES (",
+      "    ${5:'001'},",
+      "    ${6:CURRENT_TIMESTAMP},",
+      "    ${7:'active'}",
+      ");"
+    ],
+    "description": "Base INSERT SQL"
+  }
+}

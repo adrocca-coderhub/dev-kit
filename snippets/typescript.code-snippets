@@ -1,0 +1,64 @@
+{
+  "TypeScript Interface": {
+    "prefix": "tsinterface",
+    "body": [
+      "export interface ${1:Name} {",
+      "  ${2:id}: ${3:string};",
+      "}"
+    ],
+    "description": "Base interface en TypeScript"
+  },
+  "TypeScript Function": {
+    "prefix": "tsfunc",
+    "body": [
+      "export function ${1:functionName}(${2:input}: ${3:string}): ${4:void} {",
+      "  ${5:// TODO: implement}",
+      "}"
+    ],
+    "description": "Función base TypeScript"
+  },
+  "TypeScript Async Function": {
+    "prefix": "tsasync",
+    "body": [
+      "export async function ${1:functionName}(${2:input}: ${3:string}): Promise<${4:void}> {",
+      "  ${5:// TODO: implement}",
+      "}"
+    ],
+    "description": "Función async base TypeScript"
+  },
+  "TypeScript Module Template": {
+    "prefix": "tsmodule",
+    "body": [
+      "export interface ${1:ProcessInput} {",
+      "  id: string;",
+      "  status?: string;",
+      "}",
+      "",
+      "export interface ${2:ProcessOutput} {",
+      "  success: boolean;",
+      "  message: string;",
+      "  data?: unknown;",
+      "}",
+      "",
+      "export function validateInput(input: ${1:ProcessInput}): void {",
+      "  if (!input.id) {",
+      "    throw new Error(\"Field 'id' is required\");",
+      "  }",
+      "}",
+      "",
+      "export function processInput(input: ${1:ProcessInput}): ${2:ProcessOutput} {",
+      "  validateInput(input);",
+      "",
+      "  return {",
+      "    success: true,",
+      "    message: \"Process completed successfully\",",
+      "    data: {",
+      "      normalizedId: input.id.trim(),",
+      "      status: input.status ?? \"unknown\",",
+      "    },",
+      "  };",
+      "}"
+    ],
+    "description": "Módulo base TypeScript"
+  }
+}

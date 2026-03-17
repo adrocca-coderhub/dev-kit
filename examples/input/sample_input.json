@@ -1,0 +1,14 @@
+{
+  "process_date": "2026-03-17",
+  "source_path": "data/input/customers.csv",
+  "output_path": "data/output/customers_processed.csv",
+  "filters": {
+    "status": "active",
+    "country": "PE"
+  },
+  "options": {
+    "drop_duplicates": true,
+    "normalize_columns": true,
+    "trim_strings": true
+  }
+}

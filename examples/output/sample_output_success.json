@@ -1,0 +1,9 @@
+{
+  "status": "success",
+  "message": "Process completed successfully",
+  "records_read": 1200,
+  "records_processed": 1148,
+  "records_loaded": 1148,
+  "output_path": "data/output/customers_processed.csv",
+  "duration_seconds": 2.431
+}

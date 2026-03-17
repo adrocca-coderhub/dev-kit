@@ -1,0 +1,6 @@
+customer_id,status,email,amount,country
+001,active,ana@example.com,1200,PE
+002,inactive,carlos@example.com,450,PE
+003,active,maria@example.com,980,CL
+003,active,maria@example.com,980,CL
+004,ACTIVE,luis@example.com,1500,PE

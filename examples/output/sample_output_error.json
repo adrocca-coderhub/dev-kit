@@ -1,0 +1,8 @@
+{
+  "status": "error",
+  "error_code": "MISSING_REQUIRED_COLUMNS",
+  "message": "Missing required columns: customer_id, email",
+  "records_read": 0,
+  "records_processed": 0,
+  "records_loaded": 0
+}
