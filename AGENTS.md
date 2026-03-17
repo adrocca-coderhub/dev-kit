@@ -9,7 +9,7 @@ Este repositorio es un **toolkit de desarrollador**: prompts reutilizables para 
 | Capa | Tecnología |
 |---|---|
 | Scripts de datos | Python 3.9+ |
-| Transformaciones / ETL | pandas, sqlalchemy (cuando se implementen) |
+| Transformaciones / ETL | pandas>=2.0.0 |
 | Tipado estático | mypy (modo strict recomendado) |
 | Linter | Ruff o Flake8 |
 | Formatter | Black (ancho 88) + isort |
@@ -27,28 +27,54 @@ Este repositorio es un **toolkit de desarrollador**: prompts reutilizables para 
 
 ```
 dev-kit/
+├── .opencode/
+│   └── commands/          # Comandos slash reutilizables para OpenCode
+├── docs/
+│   ├── decisions/         # ADRs — Architecture Decision Records
+│   ├── standards/         # Estándares de documentación y naming
+│   ├── workflows/         # Flujos de trabajo por tipo de tarea
+│   └── kit-index.md       # Mapa maestro del kit
 ├── examples/
-│   ├── docs/          # Documentación de ejemplo
-│   ├── input/         # Datos de entrada de ejemplo
-│   └── output/        # Salidas de ejemplo
-├── playbooks/         # Checklists de proceso (delivery, jira, onboarding, PR, release)
-├── prompts/           # Plantillas de prompt por categoría
-│   ├── analysis/      # Prompts de análisis
-│   ├── data/          # Prompts ETL, carga, profiling
-│   ├── github/        # Prompts para PRs
-│   ├── jira/          # Prompts para tickets Jira
-│   └── master/        # prompt-master.md — plantilla base para nuevos prompts
-├── scripts/           # Scripts Python de datos (ver sección abajo)
-├── skills/            # Definiciones de skill para IA (rol + reglas + estructura de salida)
+│   ├── docs/              # Documentación de ejemplo
+│   ├── input/             # Datos de entrada de ejemplo
+│   └── output/            # Salidas de ejemplo
+├── playbooks/             # Checklists de proceso (delivery, jira, onboarding, PR, release)
+├── prompts/               # Plantillas de prompt por categoría
+│   ├── analysis/
+│   ├── data/              # Prompts ETL, carga, profiling
+│   ├── github/
+│   ├── jira/
+│   └── master/            # prompt-master.md — base para nuevos prompts
+├── scripts/               # Scripts Python de datos
+│   ├── data_quality/
+│   │   ├── profile_dataset.py
+│   │   └── validate_schema.py
+│   ├── etl/
+│   │   └── pipeline_etl.py
+│   ├── load/
+│   │   └── load.py
+│   ├── preprocess/
+│   │   └── preprocess.py
+│   └── utils/
+│       ├── file_utils.py
+│       └── logger.py
+├── skills/                # Definiciones de skill para IA
 │   ├── analysis/
 │   ├── data/
 │   ├── jira/
 │   └── pr/
-├── snippets/          # Snippets de VSCode (.code-snippets)
-├── templates/         # Plantillas Markdown de salida
-│   ├── jira/          # jira-doc-template.md
-│   └── pr/            # pr-doc-template.md
-└── vscode/            # Configuración VSCode (settings, keybindings, tasks, profiles)
+├── snippets/              # Snippets de VSCode (.code-snippets)
+├── templates/             # Plantillas Markdown de salida
+│   ├── jira/              # jira-doc-template.md
+│   └── pr/                # pr-doc-template.md
+├── vscode/                # Configuración VSCode de referencia
+│   ├── extensions/        # extensions-recommended.md
+│   ├── keybindings/       # keybindings.json
+│   ├── settings/          # settings.json
+│   └── tasks/             # tasks.json
+├── AGENTS.md
+├── README.md
+└── requirements.txt
 ```
 
 ---
@@ -57,17 +83,15 @@ dev-kit/
 
 Todos los scripts de datos viven en `scripts/`:
 
-```
-scripts/
-├── etl/
-│   └── pipeline_etl.py      # Lógica de transformación principal
-├── load/
-│   └── loader.py             # Carga de datos a destino
-├── preprocess/
-│   └── preprocess.py         # Preprocesamiento y limpieza
-├── data_quality/             # Checks de calidad de datos
-└── utils/                    # Helpers y utilidades compartidas
-```
+| Archivo | Propósito |
+|---|---|
+| `scripts/etl/pipeline_etl.py` | Pipeline completo: leer, validar, transformar, cargar |
+| `scripts/preprocess/preprocess.py` | Normalización de columnas, limpieza y deduplicación |
+| `scripts/load/load.py` | Carga de datos procesados a destino (CSV) |
+| `scripts/data_quality/profile_dataset.py` | Profiling: filas, tipos, nulos, duplicados |
+| `scripts/data_quality/validate_schema.py` | Validación de schema contra columnas esperadas |
+| `scripts/utils/file_utils.py` | Helpers de lectura/escritura de archivos |
+| `scripts/utils/logger.py` | Logger compartido con formato estándar |
 
 ---
 
@@ -78,7 +102,7 @@ Los tests aún no están creados. Cuando se agreguen, deben vivir en:
 ```
 tests/
 ├── test_etl.py               # Tests para pipeline_etl.py
-├── test_loader.py            # Tests para loader.py
+├── test_loader.py            # Tests para load.py
 ├── test_preprocess.py        # Tests para preprocess.py
 └── conftest.py               # Fixtures compartidos de pytest
 ```
@@ -90,13 +114,23 @@ tests/
 Este repo no tiene servidor ni aplicación. Los scripts se ejecutan individualmente:
 
 ```bash
-# Instalar dependencias (cuando se agregue requirements.txt)
+# Instalar dependencias
 pip install -r requirements.txt
 
-# Ejecutar un script específico con argumento de fecha
-python scripts/etl/pipeline_etl.py --process_date 2026-03-17
-python scripts/preprocess/preprocess.py --process_date 2026-03-17
-python scripts/load/loader.py --process_date 2026-03-17
+# ETL completo
+python scripts/etl/pipeline_etl.py --input examples/input/data.csv --output examples/output/data_etl.csv
+
+# Preprocesamiento
+python scripts/preprocess/preprocess.py --input examples/input/data.csv --output examples/output/data_clean.csv
+
+# Carga
+python scripts/load/load.py --input examples/output/data_clean.csv --output examples/output/data_loaded.csv
+
+# Profiling de dataset
+python scripts/data_quality/profile_dataset.py --input examples/input/data.csv
+
+# Validación de schema
+python scripts/data_quality/validate_schema.py --input examples/input/data.csv
 ```
 
 ---
@@ -146,8 +180,8 @@ npx vitest run path/to/file.test.ts
 |---|---|---|
 | Variables y funciones | `snake_case` | `process_date`, `order_id` |
 | Clases | `PascalCase` | `EtlPipeline`, `DataLoader` |
-| Constantes | `UPPER_SNAKE_CASE` | `MAX_RETRIES`, `DEFAULT_PATH` |
-| Archivos y módulos | `snake_case` | `pipeline_etl.py`, `data_loader.py` |
+| Constantes | `UPPER_SNAKE_CASE` | `MAX_RETRIES`, `REQUIRED_COLUMNS` |
+| Archivos y módulos | `snake_case` | `pipeline_etl.py`, `file_utils.py` |
 | Helpers privados | prefijo `_` | `_validate_schema` |
 | Tests | prefijo `test_` | `test_transform_valid_record` |
 
@@ -164,6 +198,7 @@ npx vitest run path/to/file.test.ts
 
 - Archivos Markdown: `kebab-case` (ej. `pr-doc-template.md`, `jira-doc-skill.md`)
 - Snippets VSCode: `{lenguaje}.code-snippets`
+- ADRs: `NNNN-titulo-kebab-case.md` (ej. `0001-record-architecture-decisions.md`)
 
 ---
 
@@ -183,7 +218,8 @@ import pandas as pd
 import sqlalchemy as sa
 
 # 3. Módulos internos
-from scripts.utils.helpers import validate_input
+from scripts.utils.file_utils import read_csv_file
+from scripts.utils.logger import get_logger
 ```
 
 ### Type hints
@@ -216,12 +252,16 @@ def transform(record: dict[str, Any], date: str) -> Optional[dict[str, Any]]:
 
 ```python
 if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--process_date", required=True)
-    args = parser.parse_args()
-    result = main(process_date=args.process_date)
-    print(result)
+    sys.exit(main())
+
+def main() -> int:
+    try:
+        args = parse_args()
+        # lógica principal
+        return 0
+    except Exception as exc:
+        logger.exception("Script failed: %s", exc)
+        return 1
 ```
 
 ---
@@ -242,6 +282,7 @@ if __name__ == "__main__":
 |---|---|---|
 | PR de GitHub | `templates/pr/pr-doc-template.md` | Toda PR que se abra |
 | Ticket Jira | `templates/jira/jira-doc-template.md` | Todo ticket de Jira |
+| ADR | `docs/decisions/0001-record-architecture-decisions.md` | Decisiones de arquitectura relevantes |
 
 ### Secciones obligatorias en PRs
 Resumen · Archivos modificados (tabla) · Descripción detallada · Flujo funcional · Diagrama Mermaid · Datos utilizados · Contrato input/output · Reglas de negocio · Casos representativos · Riesgos · Pendientes · Referencias
@@ -262,11 +303,15 @@ flowchart TD
 
 ---
 
-## Prompts y skills
+## Prompts, skills y comandos OpenCode
 
-- **Prompts** en `prompts/` — usar `prompts/master/prompt-master.md` como base para cualquier prompt nuevo
-- **Skills** en `skills/` — estructura: declaración de rol → reglas obligatorias → estructura de salida → placeholders de contexto
-- Al crear un prompt o skill nuevo, seguir la estructura existente; no dejar archivos vacíos
+| Carpeta | Propósito |
+|---|---|
+| `prompts/` | Plantillas de prompt para usar en cualquier IA; base: `prompts/master/prompt-master.md` |
+| `skills/` | Instrucciones estructuradas: rol → reglas → estructura de salida → placeholders |
+| `.opencode/commands/` | Comandos slash reutilizables directamente en OpenCode (ej. `/pr-doc`, `/jira-doc`) |
+
+Al crear un prompt o skill nuevo, seguir la estructura existente; no dejar archivos vacíos.
 
 ---
 
@@ -276,4 +321,4 @@ flowchart TD
 - **Idioma del código:** inglés (nombres de variables, funciones, archivos)
 - **Tablas:** pipe tables con fila de encabezado y separador `---`
 - **Bloques de código:** siempre especificar el lenguaje (` ```python `, ` ```json `, ` ```sql `, ` ```mermaid `)
-- **Archivos placeholder:** al implementar un scaffold vacío (ej. `scripts/etl/pipeline_etl.py`), implementar el módulo completo — no dejar archivos vacíos
+- **Archivos placeholder:** al implementar un scaffold vacío, implementar el módulo completo — no dejar archivos vacíos

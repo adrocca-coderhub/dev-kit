@@ -1,0 +1,150 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    // ─── ETL ───────────────────────────────────────────────────
+    {
+      "label": "ETL: correr pipeline",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "scripts/etl/pipeline_etl.py",
+        "--input", "${input:inputPath}",
+        "--output", "${input:outputPath}"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+
+    // ─── Preprocesamiento ──────────────────────────────────────
+    {
+      "label": "Preprocess: correr preprocesamiento",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "scripts/preprocess/preprocess.py",
+        "--input", "${input:inputPath}",
+        "--output", "${input:outputPath}"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+
+    // ─── Load ──────────────────────────────────────────────────
+    {
+      "label": "Load: cargar datos",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "scripts/load/load.py",
+        "--input", "${input:inputPath}",
+        "--output", "${input:outputPath}"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+
+    // ─── Data Quality ──────────────────────────────────────────
+    {
+      "label": "Data Quality: profiling de dataset",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "scripts/data_quality/profile_dataset.py",
+        "--input", "${input:inputPath}"
+      ],
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Data Quality: validar schema",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "scripts/data_quality/validate_schema.py",
+        "--input", "${input:inputPath}"
+      ],
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared",
+        "clear": true
+      },
+      "problemMatcher": []
+    },
+
+    // ─── Pipeline completo ─────────────────────────────────────
+    {
+      "label": "Pipeline: flujo completo (preprocess → etl → load)",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "Preprocess: correr preprocesamiento",
+        "ETL: correr pipeline",
+        "Load: cargar datos"
+      ],
+      "group": "build",
+      "problemMatcher": []
+    },
+
+    // ─── Lint / Format ─────────────────────────────────────────
+    {
+      "label": "Lint: ruff check scripts",
+      "type": "shell",
+      "command": "ruff check scripts/",
+      "group": "test",
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+    {
+      "label": "Format: black + isort",
+      "type": "shell",
+      "command": "black scripts/ && isort scripts/",
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    },
+
+    // ─── Tests ─────────────────────────────────────────────────
+    {
+      "label": "Tests: correr todos",
+      "type": "shell",
+      "command": "pytest",
+      "group": { "kind": "test", "isDefault": true },
+      "presentation": { "reveal": "always", "panel": "shared", "clear": true },
+      "problemMatcher": []
+    }
+  ],
+  "inputs": [
+    {
+      "id": "inputPath",
+      "type": "promptString",
+      "description": "Ruta del archivo de entrada (ej. examples/input/data.csv)",
+      "default": "examples/input/data.csv"
+    },
+    {
+      "id": "outputPath",
+      "type": "promptString",
+      "description": "Ruta del archivo de salida (ej. examples/output/data_processed.csv)",
+      "default": "examples/output/data_processed.csv"
+    }
+  ]
+}

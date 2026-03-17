@@ -1,0 +1,95 @@
+[
+  // ─── Terminal ──────────────────────────────────────────────
+  {
+    "key": "ctrl+`",
+    "command": "workbench.action.terminal.toggleTerminal"
+  },
+  {
+    "key": "ctrl+shift+`",
+    "command": "workbench.action.terminal.new"
+  },
+
+  // ─── Focus entre paneles ───────────────────────────────────
+  {
+    "key": "ctrl+shift+e",
+    "command": "workbench.view.explorer"
+  },
+  {
+    "key": "ctrl+shift+t",
+    "command": "workbench.action.terminal.focus"
+  },
+  {
+    "key": "ctrl+shift+x",
+    "command": "workbench.action.focusActiveEditorGroup"
+  },
+
+  // ─── Markdown ──────────────────────────────────────────────
+  {
+    "key": "ctrl+shift+v",
+    "command": "markdown.showPreview"
+  },
+  {
+    "key": "ctrl+k v",
+    "command": "markdown.showPreviewToSide"
+  },
+
+  // ─── Tasks ─────────────────────────────────────────────────
+  {
+    "key": "ctrl+shift+b",
+    "command": "workbench.action.tasks.runTask"
+  },
+  {
+    "key": "ctrl+shift+r",
+    "command": "workbench.action.tasks.reRunTask"
+  },
+
+  // ─── Navegación ────────────────────────────────────────────
+  {
+    "key": "ctrl+shift+p",
+    "command": "workbench.action.showCommands"
+  },
+  {
+    "key": "ctrl+p",
+    "command": "workbench.action.quickOpen"
+  },
+  {
+    "key": "ctrl+shift+f",
+    "command": "workbench.action.findInFiles"
+  },
+
+  // ─── Editor ────────────────────────────────────────────────
+  {
+    "key": "alt+up",
+    "command": "editor.action.moveLinesUpAction",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "alt+down",
+    "command": "editor.action.moveLinesDownAction",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+d",
+    "command": "editor.action.copyLinesDownAction",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "ctrl+shift+k",
+    "command": "editor.action.deleteLines",
+    "when": "editorTextFocus"
+  },
+
+  // ─── Docs / Markdown ───────────────────────────────────────
+  {
+    "key": "ctrl+k ctrl+b",
+    "command": "editor.action.insertSnippet",
+    "when": "editorLangId == markdown",
+    "args": { "langId": "markdown", "name": "Tabla Markdown" }
+  },
+  {
+    "key": "ctrl+k ctrl+m",
+    "command": "editor.action.insertSnippet",
+    "when": "editorLangId == markdown",
+    "args": { "langId": "markdown", "name": "Diagrama Mermaid" }
+  }
+]
