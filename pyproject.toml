@@ -9,6 +9,10 @@ description = "Kit personal de desarrollo: scripts ETL, templates y herramientas
 requires-python = ">=3.9"
 dependencies = [
     "pandas>=2.0.0",
+    "pyyaml>=6.0",
+    "sqlalchemy>=2.0",
+    "openpyxl>=3.1",
+    "pyarrow>=16.0",
 ]
 
 [project.optional-dependencies]
@@ -20,6 +24,7 @@ dev = [
     "pandas-stubs>=2.0.0",
     "pytest>=8.0.0",
     "pytest-cov>=5.0.0",
+    "pytest-mock>=3.14.0",
 ]
 
 # ─── Black ────────────────────────────────────────────────────

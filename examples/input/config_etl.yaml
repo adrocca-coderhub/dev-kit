@@ -1,0 +1,86 @@
+# ─── config_etl.yaml ─────────────────────────────────────────────────────────
+# Configuración de ejemplo para pipeline_etl.py
+# Uso: python scripts/etl/pipeline_etl.py --input examples/input/data.csv --output examples/output/data_etl.csv --config examples/input/config_etl.yaml
+
+# ─── Columnas de fecha ────────────────────────────────────────────────────────
+# Formato YYYYMMDD: 20230115 → 2023-01-15  (centinelas 19000101, 18000101 → NaT)
+# Formato YYYYMM:   202301   → 2023-01-01  (centinelas 190001, 180001 → NaT)
+# Otros formatos:   cualquier patrón strftime válido (ej. "%Y-%m-%d")
+date_columns:
+  order_date: YYYYMMDD
+  billing_month: YYYYMM
+  created_at: "%Y-%m-%d"
+
+# ─── Schema de entrada ────────────────────────────────────────────────────────
+schema:
+  # Columnas requeridas para la validación del ETL
+  required_columns:
+    - CUSTOMER_ID
+    - STATUS
+    - AMOUNT
+
+  # Reglas detalladas por columna (usadas por validate_schema.py)
+  columns:
+    - name: CUSTOMER_ID
+      required: true
+      dtype: numeric
+      nullable: false
+
+    - name: STATUS
+      required: true
+      dtype: string
+      nullable: false
+      allowed_values:
+        - active
+        - inactive
+        - pending
+
+    - name: AMOUNT
+      required: true
+      dtype: numeric
+      nullable: true
+      min_value: 0
+      max_value: 10000000
+
+    - name: ORDER_DATE
+      required: false
+      dtype: datetime
+      nullable: true
+
+    - name: EMAIL
+      required: false
+      dtype: string
+      nullable: true
+
+# ─── Salida ───────────────────────────────────────────────────────────────────
+output:
+  # Opciones: csv | parquet | postgresql
+  format: csv
+  path: examples/output/data_etl.csv
+
+  # Para Parquet (descomentar y cambiar format a "parquet"):
+  # format: parquet
+  # path: examples/output/data_etl.parquet
+  # compression: snappy   # snappy | gzip | brotli | lz4 | zstd
+
+  # Para PostgreSQL (descomentar y cambiar format a "postgresql"):
+  # format: postgresql
+  # table: etl_output
+  # schema: public
+  # if_exists: append     # append | replace | fail
+
+# ─── Base de datos (requerido si output.format = postgresql) ─────────────────
+# database:
+#   dialect: postgresql
+#   host: localhost
+#   port: 5432
+#   name: my_database
+#   user: my_user
+#   password: my_password
+#   schema: public
+
+# ─── Umbrales de calidad (referencia para profile_dataset.py) ────────────────
+quality:
+  min_quality_score: 80      # score mínimo aceptable (0–100)
+  max_null_pct: 5.0          # porcentaje máximo de nulos permitido por columna
+  max_duplicate_pct: 1.0     # porcentaje máximo de filas duplicadas
