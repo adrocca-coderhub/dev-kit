@@ -315,8 +315,62 @@ flowchart TD
 | `prompts/` | Plantillas de prompt para usar en cualquier IA; base: `prompts/master/prompt-master.md` |
 | `skills/` | Instrucciones estructuradas: rol → reglas → estructura de salida → placeholders |
 | `.opencode/commands/` | Comandos slash reutilizables directamente en OpenCode (ej. `/pr-doc`, `/jira-doc`) |
+| `.opencode/agents/` | Agentes especializados de OpenCode con permisos y prompts de sistema |
 
 Al crear un prompt o skill nuevo, seguir la estructura existente; no dejar archivos vacíos.
+
+---
+
+## Sistema de agentes OpenCode
+
+Los agentes viven en `.opencode/agents/` como archivos Markdown con frontmatter YAML. Son invocados con `@nombre-del-agente` en OpenCode.
+
+### Agentes primarios
+
+| Agente | Archivo | Propósito |
+|---|---|---|
+| `plan` | `.opencode/agents/plan.md` | Analizar y planificar antes de implementar |
+| `build` | `.opencode/agents/build.md` | Implementar código siguiendo las convenciones del dev-kit |
+| `orchestrator` | `.opencode/agents/orchestrator.md` | Coordinar tareas complejas multi-agente |
+
+### Subagentes especializados
+
+| Agente | Archivo | Propósito |
+|---|---|---|
+| `repo-explorer` | `.opencode/agents/repo-explorer.md` | Exploración de repositorio (solo lectura) |
+| `solution-planner` | `.opencode/agents/solution-planner.md` | Planificación de soluciones y fases |
+| `data-engineer` | `.opencode/agents/data-engineer.md` | Scripts ETL, preprocesamiento y carga |
+| `data-modeler` | `.opencode/agents/data-modeler.md` | Schemas, contratos y TypedDicts |
+| `debugger` | `.opencode/agents/debugger.md` | Debugging estructurado con análisis de causa raíz |
+| `api-engineer` | `.opencode/agents/api-engineer.md` | Endpoints, contratos de API y errores |
+| `architecture-analyst` | `.opencode/agents/architecture-analyst.md` | Docs C4, diagramas Mermaid y ADRs |
+| `docs-writer` | `.opencode/agents/docs-writer.md` | Documentación técnica en español |
+| `reviewer` | `.opencode/agents/reviewer.md` | Revisión de código y docs con hallazgos priorizados |
+| `agent-systems` | `.opencode/agents/agent-systems.md` | Diseño y evolución del stack de agentes |
+
+### Fases de adopción
+
+- **Fase 1**: `docs-writer`, `repo-explorer`, `solution-planner`, `debugger`
+- **Fase 2**: `data-engineer`, `api-engineer`, `reviewer`
+- **Fase 3**: `architecture-analyst`, `data-modeler`, `agent-systems`
+
+### Documentación del sistema de agentes
+
+| Documento | Propósito |
+|---|---|
+| `docs/agent-strategy.md` | Descripción detallada de cada agente: inputs, outputs, permisos, diferencias |
+| `docs/workflows/opencode-workflow.md` | Workflows por tipo de tarea (bugfix, feature, datos, arquitectura) |
+| `docs/workflows/solution-planning-workflow.md` | Cómo usar `solution-planner` para tickets, features y proyectos |
+
+### Reglas para crear o modificar agentes
+
+1. Los agentes viven en `.opencode/agents/<nombre>.md`
+2. Frontmatter obligatorio: `description`, `mode`, `temperature`, `permission`
+3. `mode: subagent` para agentes especializados; `mode: primary` para agentes de entrada
+4. Permisos de mínimo privilegio: `edit: deny` si no escribe, `bash: deny "*"` con excepciones explícitas
+5. El system prompt debe incluir: rol, responsabilidades, cuándo usar, protocolo y restricciones
+6. Documentar diferencias con agentes similares cuando haya solapamiento
+7. Actualizar `docs/agent-strategy.md` al crear o modificar un agente
 
 ---
 

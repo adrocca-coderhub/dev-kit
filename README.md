@@ -22,6 +22,7 @@ Centralizar templates, prompts, skills, snippets, scripts base y playbooks reuti
 | `docs/` | Documentación maestra, ADRs, estándares y workflows |
 | `vscode/` | Configuración de referencia para VS Code |
 | `.opencode/commands/` | Comandos slash reutilizables para OpenCode |
+| `.opencode/agents/` | Agentes especializados de OpenCode |
 
 ---
 
@@ -71,6 +72,43 @@ pip install -e ".[dev]"
 
 ---
 
+## Agentes OpenCode disponibles
+
+Agentes especializados en `.opencode/agents/`. Usar con `@nombre-del-agente`.
+
+### Agentes primarios (acceso directo)
+
+| Agente | Propósito |
+|---|---|
+| `@plan` | Analizar y planificar antes de implementar |
+| `@build` | Implementar código siguiendo convenciones del dev-kit |
+| `@orchestrator` | Coordinar tareas complejas delegando en subagentes |
+
+### Subagentes (especializados)
+
+| Agente | Propósito |
+|---|---|
+| `@repo-explorer` | Explorar el repositorio sin modificar nada |
+| `@solution-planner` | Diseñar soluciones, fases y criterios de aceptación |
+| `@data-engineer` | Implementar scripts ETL, preprocesamiento y carga |
+| `@data-modeler` | Definir schemas, contratos y TypedDicts |
+| `@debugger` | Investigar bugs con análisis de causa raíz estructurado |
+| `@api-engineer` | Diseñar endpoints, contratos y manejo de errores |
+| `@architecture-analyst` | Documentar arquitectura con C4, Mermaid y ADRs |
+| `@docs-writer` | Redactar documentación técnica en español |
+| `@reviewer` | Revisar código o docs con hallazgos priorizados |
+| `@agent-systems` | Diseñar o mejorar el stack de agentes |
+
+### Fases de adopción recomendadas
+
+- **Fase 1**: `docs-writer`, `repo-explorer`, `solution-planner`, `debugger`
+- **Fase 2**: `data-engineer`, `api-engineer`, `reviewer`
+- **Fase 3**: `architecture-analyst`, `data-modeler`, `agent-systems`
+
+Ver `docs/agent-strategy.md` para descripción detallada de cada agente.
+
+---
+
 ## Casos de uso
 
 - Redactar documentación de PR lista para pegar en GitHub
@@ -112,6 +150,8 @@ Para usar: copiar `settings.json` a `.vscode/settings.json` y `tasks.json` a `.v
 4. Usar `templates/` como molde para documentar PRs y tickets
 5. Configurar VS Code con los archivos de `vscode/`
 6. Probar comandos slash en `.opencode/commands/`
+7. Revisar `docs/agent-strategy.md` para entender el sistema de agentes
+8. Ver `docs/workflows/opencode-workflow.md` para flujos de trabajo por tipo de tarea
 
 ---
 
